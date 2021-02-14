@@ -86,6 +86,8 @@ class Scanner {
                     while(peek() != '\n' && !isAtEnd()) {
                         advance();
                     }
+                } else if (match('*')) {
+                    multilinecomment();
                 } else {
                     addToken(SLASH);
                 }
@@ -201,6 +203,23 @@ class Scanner {
         String value = source.substring(start+1, current -1);
         // This is where we would typically unescape things like \n
         addToken(STRING, value); 
+    }
+
+    private void multilinecomment() {
+        while(peek() != '*' && peekNext() != '/' && !isAtEnd()) {
+            if (peek() == '\n') { line++; }
+            advance();
+        }
+
+        // Did we exit due to hitting the end?
+        if (isAtEnd()) {
+            Lox.error(line, "Unterminated multiline comment.");
+            return;
+        }
+
+        // Consume the asterisk and the slash
+        advance();
+        advance();
     }
 
     private void addToken(TokenType type) {
