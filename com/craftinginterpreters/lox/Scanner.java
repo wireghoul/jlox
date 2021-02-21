@@ -34,6 +34,7 @@ class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    private int mcnest = 0;
 
     Scanner(String source) {
         this.source = source;
@@ -87,6 +88,7 @@ class Scanner {
                         advance();
                     }
                 } else if (match('*')) {
+                    mcnest=1;
                     multilinecomment();
                 } else {
                     addToken(SLASH);
@@ -206,7 +208,10 @@ class Scanner {
     }
 
     private void multilinecomment() {
-        while(peek() != '*' && peekNext() != '/' && !isAtEnd()) {
+        while(mcnest> 0 && !isAtEnd()) {
+        // Room to optimize in future...
+            if (peek() == '/' && peekNext() == '*' && !isAtEnd()) { mcnest++; }
+            if (peek() == '*' && peekNext() == '/') { mcnest--; }
             if (peek() == '\n') { line++; }
             advance();
         }

@@ -2,3 +2,10 @@
 ignore this
 */
 1+1=3;
+/*
+ignore /* this too */ /* Still going
+*/
+999.9+1!=45
+*/
+
+/* break on this /* /*
