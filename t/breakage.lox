@@ -1,0 +1,5 @@
+// Can we identify a function as undefined?
+var a = 1;
+print "hello world\n";
+print a;
+undefinedfunc a;
