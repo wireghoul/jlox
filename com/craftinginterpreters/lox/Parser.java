@@ -13,6 +13,14 @@ class Parser {
         this.tokens = tokens;
     }
 
+    Expr parse() {
+        try {
+            return expression();
+        } catch (ParseError error) {
+            return null;
+        }
+    }
+
     private Expr expression() {
         return equality();
     }
@@ -89,9 +97,9 @@ class Parser {
             consume(RIGHT_PAREN, "Expect ')' after expression.");
             return new Expr.Grouping(expr);
         }
-        // Make compiler shut up about potential non return value
-        // We shouldn't reach this, but if we do nil should hopefully force an error
-        return new Expr.Literal(null);
+        // If no other rule has matched prior to primary and it isn't a primary
+        // It must be an invalid token
+        throw error(peek(), "Expected expression");
     }
 
     // "House keeping" routines
@@ -141,5 +149,29 @@ class Parser {
     private ParseError error(Token token, String message) {
         Lox.error(token, message);
         return new ParseError();
+    }
+
+    private void synchronize() {
+        advance();
+
+        while (!isAtEnd()) {
+            if (previous().type == SEMICOLON) {
+                return;
+            }
+
+            switch (peek().type) {
+                case CLASS:
+                case FUN:
+                case VAR:
+                case FOR:
+                case IF:
+                case WHILE:
+                case PRINT:
+                case RETURN:
+                return;
+            }
+
+            advance();
+        }
     }
 }
