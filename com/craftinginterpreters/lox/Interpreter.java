@@ -35,24 +35,19 @@ class Interpreter implements Expr.Visitor<Object> {
 
         switch (expr.operator.type) {
             case GREATER:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left > (double)right;
             case GREATER_EQUAL:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left >= (double)right;
             case LESS:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left < (double)right;
             case LESS_EQUAL:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left <= (double)right;
             case MINUS:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left - (double)right;
             case PLUS:
                 if (left instanceof Double && right instanceof Double) {
@@ -63,12 +58,10 @@ class Interpreter implements Expr.Visitor<Object> {
                 }
                 break;
             case SLASH:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left / (double)right;
             case STAR:
-                checkNumberOperand(expr.operator, left);
-                checkNumberOperand(expr.operator, right);
+                checkNumberOperands(expr.operator, left, right);
                 return (double)left * (double)right;
             case BANG_EQUAL:
                 return !isEqual(left, right);
@@ -101,5 +94,10 @@ class Interpreter implements Expr.Visitor<Object> {
             return;
         }
         throw new RuntimeError(operator, "Operand must be a number.");
+    }
+    
+    private void checkNumberOperands(Token operator, Object left, Object right) {
+        checkNumberOperand(operator, left);
+        checkNumberOperand(operator, right);
     }
 }
