@@ -5,7 +5,7 @@ ignore this
 /*
 ignore /* this too */ /* Still going
 */
-999.9+1!=45
+999.9+1!=4;
 */
 
 /* break on this /* /*
