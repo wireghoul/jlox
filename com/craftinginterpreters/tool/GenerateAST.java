@@ -18,6 +18,10 @@ class GenerateAST {
             "Literal    : Object value",
             "Unary      : Token operator, Expr right"
         ));
+        DefineAst(outputDir, "Stmt", Arrays.asList(
+            "Expression : Expr expression",
+            "Print      : Expr expression"
+        ));
     }
 
 
